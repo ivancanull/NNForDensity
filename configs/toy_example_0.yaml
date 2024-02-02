@@ -1,0 +1,45 @@
+case: "toy_example"
+
+datasets:
+    type: "on_gpu" # supported types: "on_gpu": load data on GPU
+    dir: "../data/toy_example/"
+    name: "toy_example"
+    benchmark: "adaptec1"
+    input_type: "npy"
+    output_type: "npy"
+    dataset_size: 497
+    train_ratio: 0.8
+    test_ratio: 0.1
+    val_ratio: 0.1
+    regenerate: False
+
+num_epochs: 2000
+batch_size: 32
+
+ckpt:
+  read: True # if True, means the model will be loaded from the checkpoint, otherwise, the model will be trained from scratch
+  save: True # if True, means the model will be saved to the checkpoint
+  save_per_epoch: 100 # save the model every 100 epochs
+  early_stop_thres: 0 # the threshold of validation error for early stopping
+
+transforms:
+    label_normalization: True # normalize the label to [0, 1]
+
+model:
+    name: "unet"
+    input_dim: 512
+    output_dim: 256
+    in_channels: 1
+    mid_channels: [64, 32, 16, 64, 64]
+    out_channels: 1
+
+lr_scheduler:
+    name: "constant"
+
+optimizer:
+    name: "adamw"
+    lr: 0.0001
+    weight_decay: 0.0001
+
+criterion:
+    name: "mse"
